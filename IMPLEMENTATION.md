@@ -1,52 +1,47 @@
-# Журнал реализации
+# Implementation notes
 
-## Исправления окна и панели задач
+## Mixer and taskbar fixes
 
-- Индикатор сигнала использует системный акцент и центрируется внутри дорожки. Белая заливка громкости подходит к небольшому белому бегунку. Пик отображается по линейной шкале от Core Audio с плавным спадом.
-- Непрозрачность Acrylic регулирует только фон. Изменение от 0% до 100% проверено через Apply и сравнением снимков окна.
-- Виджет сохраняет безопасное место при повторном измерении и восстанавливает порядок окон, если его перекрывает сама панель задач. Проверено 16 секунд наблюдения и получение уведомления об обновлении разметки с сохранением существующего окна.
+- The signal meter uses the Windows accent color and is centered in the fader track. The white volume fill meets a small white knob. Core Audio peaks are displayed on a linear scale with a smooth falloff.
+- Acrylic opacity affects the background. Values from 0% to 100% were tested with Apply and by comparing screenshots.
+- The widget preserves a safe position across layout measurements and restores its stacking order if the taskbar covers it. In a 16-second check, a layout notification was received and the widget retained its window handle.
+- Settings has five tabs and a fixed footer with Apply. A setting change was verified on disk while the window stayed open.
+- The knobs fit inside the native control cells. The mixer uses a single rounded outline and has a Pin control in the corner.
+- The tray icon renderer validates alpha. Tray registration is retried, with a window-based identifier as a fallback if Explorer rejects the GUID. Explorer accepted the GUID in testing.
+- When **Taskbar + Tray** was enabled, both the widget and the tray icon were present. Horizontal and vertical resize cursors were tested interactively.
+- Device volume changes are delivered through separate messages. During a fast drag, the audio thread applies the latest pending value and the fader ignores acknowledgments for older commands.
+- The widget retains its last measured position through brief UI Automation failures and tray size changes while that position remains free.
+- The mixer opens at the right edge of the work area and saves its position and size. Knobs render above the tracks, and the viewport fits whole fader columns.
+- The tray uses Segoe Fluent Icons for volume and mute. The default backdrop is Mica Alt, with Acrylic available in Settings.
+- Release testing covered master fader dragging, external volume synchronization, left and top edge resizing, dragging the window by a blank area, and restoring its position after restart. In **Taskbar only** mode, the widget stayed visible with the same HWND for the six-second observation.
 
-- В настройках пять вкладок и постоянная нижняя панель с Apply. Применение проверено сохранением изменённой настройки при открытом окне.
-- Круги бегунков помещаются внутрь ячеек нативных контролов. У окна один контур скругления, в углу есть кнопка Pin.
-- Значки трея рисуются с проверкой альфа-канала. Добавлена повторная регистрация, в том числе по идентификатору окна при отклонении GUID. В тесте Explorer подтвердил регистрацию по GUID.
-- В режиме Taskbar + Tray одновременно подтверждены видимый виджет и положение значка трея. В интерактивном тесте менялись курсоры горизонтального и вертикального изменения размера.
+## Tests performed
 
-- Изменения громкости устройства поступают отдельными сообщениями. При быстром перетаскивании аудиопоток применяет последнее ожидающее значение, а фейдер игнорирует подтверждения устаревших команд.
-- Виджет сохраняет последнее измеренное место при кратком сбое UI Automation и при изменении размеров трея, если это место остаётся свободным.
-- Окно по умолчанию прилегает к правому краю рабочей области. Положение после переноса и размер сохраняются. Бегунки занимают верхний слой дорожек, а видимая область прокрутки вмещает целые колонки.
-- В трее используются глифы Segoe Fluent Icons для уровня громкости и Mute. Основной материал окна — Mica Alt, Acrylic доступен в настройках.
-- В Release проверены перетаскивание основного фейдера, синхронизация внешней громкости, resize за левый и верхний края, перенос за свободную область и восстановление положения после перезапуска микшера. В режиме Taskbar only за шесть секунд наблюдения виджет оставался видимым с тем же HWND.
+- The Win32 prototype was tested on Windows 11 x64 26H2, build 26300.9974, at 125% scaling. Explorer rejected one external child window approach. A nonactivating Win32 window appeared in the free taskbar space and passed mouse hit testing.
+- An x64 Release build was produced with the Windows App SDK deployed next to the executable.
+- Release testing covered app startup, widget availability, showing and hiding the mixer, native sliders, external master volume synchronization, and per-app fader persistence.
+- Windows routed a mouse wheel event that changed the output volume from 30% to 32%. The original volume was restored. Right-click opened the system menu, and the widget was recreated after a `TaskbarCreated` message.
+- A quiet test signal verified the accent-colored meters inside the output and active application tracks.
 
-## Проверено
+## Checks after the code audit
 
-- Прототип Win32 запущен на Windows 11 x64 26H2, сборка 26300.9974, при масштабе 125%. Explorer отклонил создание внешнего дочернего окна. Неактивирующее Win32-окно в свободном месте панели отобразилось и прошло проверку попадания мыши.
-- Собрана конфигурация Release x64 с поставкой Windows App SDK в каталоге приложения.
-- В Release проверены запуск, доступность виджета, открытие и скрытие микшера, наличие нативных слайдеров, синхронизация внешнего изменения общей громкости и сохранение значений фейдеров приложений.
-- Событие колеса через маршрутизацию Windows изменило реальный уровень с 30% до 32%. Исходный уровень восстановлен после проверки. Правый клик открыл системное меню, а виджет пересоздался после сообщения `TaskbarCreated`.
-- На тихом тестовом сигнале проверена акцентная подсветка внутри дорожек устройства и воспроизводящего приложения.
+- The previous settings file survived a write failure. After moving the mixer, Retry saved the updated coordinates.
+- The mixer updates the affected Core Audio sessions when changing volume. In a test of 150 changes, the final command reached the audio session during shutdown. The meters ran at 49 Hz. When the UI was delayed, one notification remained pending.
+- Switching the physical output was tested for the Console and Multimedia roles. Selecting Console alone changed both roles in Windows. The mixer detected the extra change and restored the original output. Communications stayed on its own device when switching the other two roles.
+- After an Explorer restart, the widget returned in under a second and could open the mixer. The tray icon returned when the notification area finished loading. The widget remained accessible next to Wireless Battery in 58 checks.
+- The Release x64 build occupied about 121 MiB at the time of the audit. Debug symbols and linker files were in the intermediate build directory.
 
-## Проверки после аудита
+## Scenarios pending verification
 
-- При отказе записи настроек старый файл сохранился. После перемещения окна кнопка Retry записала новые координаты.
-- Смена громкости из микшера обновляет затронутые сессии Core Audio. В тесте из 150 изменений последняя команда дошла до аудиосессии при выходе. Индикаторы работали на 49 Гц. При задержке UI в очереди оставалось одно уведомление.
-- Проверено переключение реального выхода через Console и Multimedia. При выборе только Console Windows поменяла обе роли. Микшер выявил побочное изменение и вернул исходный выход. Communications осталась на своём устройстве при переключении пары.
-- После реального перезапуска Explorer виджет вернулся менее чем за секунду и открывал микшер. Трей восстановился после загрузки области уведомлений. В течение 58 проверок виджет оставался доступен рядом с Wireless Battery.
-- Release x64 занимает около 121 МиБ. Отладочные символы и файлы линкера лежат в промежуточном каталоге сборки.
+- Finding available favorite devices and recovering from an audio service failure.
+- Hiding and reordering outputs in Settings and retrieving packaged app icons from AppsFolder.
+- Multiple monitors with different DPI settings, scaling from 100% to 200%, resuming from sleep, and physically disconnecting USB, Bluetooth, and HDMI outputs.
+- Long-running CPU, RAM, and handle measurements with the mixer visible and hidden. The Core Audio peak meter timer stops when the mixer is hidden.
+- Testing on more Windows 11 configurations. The current checks used one monitor and one active output device.
 
-## Реализовано, требуется сценарная проверка
+## Technical limitations
 
-- Поиск доступных избранных устройств и восстановление после сбоя аудиослужбы.
-- Скрытие и перестановка выходов в Settings и получение иконок пакетированных приложений через AppsFolder.
-- Несколько мониторов с разным DPI, полный диапазон 100–200%, выход из сна и физическое отключение USB, Bluetooth и HDMI.
-- Длительное измерение CPU, RAM и дескрипторов при открытом и скрытом микшере. Таймер Core Audio Peaks останавливается при скрытии окна.
-
-## Оставшиеся пункты
-
-- Полная проверка на нескольких конфигурациях Windows 11. Текущая проверка выполнена на одном мониторе с одним активным устройством вывода.
-
-## Технические ограничения
-
-- Windows 11 не предоставляет публичной точки расширения для такого виджета. Размещение зависит от панели Explorer, её UI Automation и наличия свободного места. При неподдерживаемой разметке, автоскрытии панели или полноэкранном режиме используется доступ через трей.
-- Маршрут колеса зависит от системной настройки прокрутки неактивных окон. События обычного значка в трее ограничены Windows.
-- Изменение устройства по умолчанию зависит от недокументированного интерфейса PolicyConfig. В интерфейсе отображается действительное состояние Core Audio.
-- Для совмещения с дорожкой индикатор использует части штатного вертикального шаблона Slider. При обновлении Windows App SDK следует перепроверить имена этих частей.
+- Windows 11 offers no public extension point for this type of widget. Placement depends on Explorer's taskbar, its UI Automation tree, and available space. Tray access is used for unsupported layouts, auto-hide, or full-screen mode.
+- Mouse wheel routing depends on the Windows setting for scrolling inactive windows. Standard tray icons receive a limited set of events.
+- Default output switching depends on the undocumented PolicyConfig interface. The UI displays the actual Core Audio state.
+- The meter uses parts of the standard vertical Slider template to align with the track. Recheck these part names when updating the Windows App SDK.
