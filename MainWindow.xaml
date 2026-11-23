@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="VolumeMixer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Volume Mixer">
+    <Border x:Name="MixerSurface" Background="Transparent" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}">
+        <Border.ContextFlyout>
+            <MenuFlyout x:Name="MixerMenu">
+                <MenuFlyoutItem Text="Settings" Click="SettingsButton_Click"/>
+            </MenuFlyout>
+        </Border.ContextFlyout>
+        <Grid>
+        <Grid x:Name="MixerBody" Padding="16,12" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="MasterColumnWidth" Width="64"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="DeviceColumn">
+                <Button x:Name="DeviceButton" Width="32" Height="32" Padding="0"
+                        HorizontalAlignment="Center" Background="Transparent" BorderThickness="0"
+                        Click="DeviceButton_Click" AutomationProperties.Name="Switch playback device">
+                    <Grid>
+                        <FontIcon x:Name="DeviceFallback" Glyph="&#xE767;" FontSize="24"/>
+                        <Image x:Name="DeviceIcon" Width="24" Height="24"/>
+                    </Grid>
+                </Button>
+                <Slider x:Name="DeviceSlider" Width="32" Height="144" Margin="0,9,0,5" HorizontalAlignment="Center" Orientation="Vertical"
+                        FocusVisualMargin="-4,-8,-4,-8"
+                        Minimum="0" Maximum="100" IsEnabled="False" AutomationProperties.Name="Device volume"
+                        ValueChanged="DeviceSlider_ValueChanged"/>
+                <Button x:Name="DeviceMuteButton" Width="32" Height="32" Padding="0"
+                        HorizontalAlignment="Center" Background="Transparent" BorderThickness="0"
+                        IsEnabled="False" Click="DeviceMuteButton_Click" AutomationProperties.Name="Mute device">
+                    <FontIcon x:Name="DeviceMuteGlyph" Glyph="&#xE767;" FontSize="16"/>
+                </Button>
+                <TextBlock x:Name="DevicePercent" Margin="0,4,0,0" Visibility="Collapsed" TextAlignment="Center" FontSize="12"/>
+            </StackPanel>
+            <ScrollViewer x:Name="SessionScrollViewer" Grid.Column="1" Margin="0,0,0,-8"
+                          HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Enabled" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled">
+                <ItemsControl x:Name="ApplicationColumns">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Button x:Name="PinButton" Width="28" Height="28" Padding="0" Margin="0,4,4,0"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0"
+                Click="PinButton_Click" ToolTipService.ToolTip="Pin mixer window" AutomationProperties.Name="Pin mixer window">
+            <Button.Resources>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent"/>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent"/>
+            </Button.Resources>
+            <Ellipse x:Name="PinDot" Width="6" Height="6"/>
+        </Button>
+        <InfoBar x:Name="SettingsSaveError" Severity="Error" Title="Could not save mixer settings."
+                 VerticalAlignment="Bottom" MaxWidth="480" Margin="8" IsClosable="False">
+            <InfoBar.ActionButton>
+                <Button Content="Retry" Click="RetrySettingsSave_Click"/>
+            </InfoBar.ActionButton>
+        </InfoBar>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,33 @@
+Volume Mixer — Third-party credits
+
+Bundled code and artwork
+
+- LiquidGlassWinUI by luckyelysia. Its MIT-licensed shader code is used for
+  refraction and frost in Liquid Glass mode. See LiquidGlassWinUI.LICENSE.txt.
+  https://github.com/luckyelysia/LiquidGlassWinUI
+- Tabler Icons by Paweł Kuna and contributors. The Adjustments icon is the
+  basis for the app icon. See TablerIcons.LICENSE.txt (MIT).
+  https://tabler.io/icons/icon/adjustments
+- Microsoft Windows App SDK (including WinUI 3), WebView2 SDK components and
+  the Visual C++ v143 runtime are bundled with the Windows installer.
+  See the applicable SDK terms and notices in the Licenses folder.
+  https://learn.microsoft.com/windows/apps/windows-app-sdk/
+- The installer uses NSIS by its contributors. See Licenses/NSIS-COPYING.txt.
+  https://nsis.sourceforge.io/
+
+Technical references
+
+- BatteryHub / Wireless Device Battery Monitor by krisgfx9. Reference for
+  taskbar widget placement beside the notification area and Explorer recovery.
+  https://github.com/krisgfx9/Wireless-Device-Battery-Monitor
+  https://github.com/notjiccu/wireless-device-battery-monitor/tree/v1.0.4
+- TaskbarMonitor by MaybeKrat. Reference for taskbar placement and the
+  circular level indicator.
+  https://github.com/MaybeKrat/TaskbarMonitor
+- Deskband11Lib by airtaxi. Reference for Windows 11 taskbar layout.
+  https://github.com/airtaxi/Deskband11Lib
+- Microsoft UI Automation documentation. Reference for inspecting taskbar
+  layout from a separate thread.
+  https://learn.microsoft.com/windows/win32/winauto/uiauto-threading
+
+Volume Mixer's taskbar widget is independently implemented.

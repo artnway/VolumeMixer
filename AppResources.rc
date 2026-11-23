@@ -1,0 +1,7 @@
+#include "AppResources.h"
+
+IDI_VOLUME_MIXER ICON "Assets\\VolumeMixer.ico"
+
+501 RCDATA "UI\\LiquidGlassWinUI\\LiquidGlass.hlsl"
+502 RCDATA "UI\\LiquidGlassWinUI\\BlurH.hlsl"
+503 RCDATA "UI\\LiquidGlassWinUI\\BlurV.hlsl"

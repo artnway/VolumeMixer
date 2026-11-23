@@ -1,0 +1,16 @@
+.vs/
+packages/
+x64/
+dist/
+Generated Files/
+Debug/
+Release/
+*.user
+*.suo
+*.log
+*.code-workspace
+/dnd-trace.txt
+/flyout-trace.txt
+/menu-trace.txt
+/snapshot-error.txt
+/Screenshots/Settings-Redesign/
