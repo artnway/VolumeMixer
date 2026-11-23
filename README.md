@@ -2,6 +2,8 @@
 
 A native C++20 and WinUI 3 volume mixer with vertical faders for your output device and individual apps. Adjusting the master volume preserves each app's volume setting.
 
+[![Latest version — download the installer](https://img.shields.io/github/v/release/artnway/VolumeMixer?label=Latest%20version&style=for-the-badge&color=1b7136)](https://github.com/artnway/VolumeMixer/releases/latest/download/VolumeMixer-Setup-x64.exe)
+
 [Install](#install) · [Screenshots](#screenshots) · [Controls](#controls) · [Build from source](#build-from-source) · [Credits](#credits)
 
 ## Install
@@ -18,6 +20,8 @@ The installer is unsigned, so Windows SmartScreen may show a warning. [Release n
 - **Mixer backgrounds** · [Mica Alt](Screenshots/Publication-Preview/mixer-Mica.png) · [Acrylic](Screenshots/Publication-Preview/mixer-Acrylic.png) · [Clear Glass](Screenshots/Publication-Preview/mixer-ClearGlass.png) · [Liquid Glass](Screenshots/Publication-Preview/mixer-LiquidGlass.png)
 - **Settings** · [General](Screenshots/Publication-Preview/settings-General.png) · [Taskbar](Screenshots/Publication-Preview/settings-Taskbar.png) · [Mixer](Screenshots/Publication-Preview/settings-Mixer.png) · [Devices](Screenshots/Publication-Preview/settings-Devices.png) · [Shortcuts](Screenshots/Publication-Preview/settings-Shortcuts.png) · [Color Picker](Screenshots/Publication-Preview/settings-ColorPicker.png)
 - **Taskbar** · [Speaker ring](Screenshots/Publication-Preview/taskbar-IconOnly.png) · [Numeric ring](Screenshots/Publication-Preview/taskbar-VolumePercentage.png) · [Right-click menu](Screenshots/Publication-Preview/taskbar-context-menu.png)
+
+![Taskbar volume ring with the output device menu open](Screenshots/Publication-Preview/taskbar-context-menu.png)
 
 ## Controls
 
