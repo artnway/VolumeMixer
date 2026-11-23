@@ -4,7 +4,7 @@ A native C++20 and WinUI 3 volume mixer with vertical faders for your output dev
 
 [![Latest version — download the installer](https://img.shields.io/github/v/release/artnway/VolumeMixer?label=Latest%20version&style=for-the-badge&color=1b7136)](https://github.com/artnway/VolumeMixer/releases/latest/download/VolumeMixer-Setup-x64.exe)
 
-[Install](#install) · [Screenshots](#screenshots) · [Controls](#controls) · [Build from source](#build-from-source) · [Credits](#credits)
+[Install](#install) · [Screenshots](#screenshots) · [Controls](#controls) · [Build from source](#build-from-source) · [Credits](#credits) · [Telegram](https://t.me/Artnwayclub)
 
 ## Install
 
