@@ -53,6 +53,7 @@ private:
     bool m_trayWanted{ false };
     bool m_lightTaskbar{};
     ULONGLONG m_widgetVisibleSince{};
+    ULONGLONG m_widgetMissingSince{};
     std::wstring m_deviceName;
     std::wstring m_hotkeyError;
     std::vector<AudioDeviceModel> m_devices;

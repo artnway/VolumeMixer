@@ -7,6 +7,8 @@ namespace
 {
     constexpr wchar_t HostClassName[] = L"VolumeMixer.ShellHost";
     constexpr wchar_t InstanceMutexName[] = L"Local\\SelfProject.VolumeMixer.SingleInstance";
+    constexpr ULONGLONG WidgetLossGraceMs = 750;
+    constexpr ULONGLONG WidgetRecoveryGraceMs = 2000;
 }
 
 ApplicationController::~ApplicationController()
@@ -598,9 +600,14 @@ void ApplicationController::RefreshWidgetLayout(bool refreshIntegration)
 {
     bool const widgetVisible = m_taskbar.ApplyLayout();
     auto const now = GetTickCount64();
+    if (widgetVisible) m_widgetMissingSince = 0;
+    else if (m_widgetVisibleSince) m_widgetMissingSince = now;
     m_widgetVisibleSince = widgetVisible ? (m_widgetVisibleSince ? m_widgetVisibleSince : now) : 0;
-    bool const wantTray = m_settings.integrationMode != IntegrationMode::TaskbarOnly || !widgetVisible
-        || (m_trayWanted && now - m_widgetVisibleSince < 2000);
+    // Allow Explorer to settle briefly before switching an established widget to the tray.
+    bool const widgetUnavailable = !widgetVisible
+        && (m_trayWanted || !m_widgetMissingSince || now - m_widgetMissingSince >= WidgetLossGraceMs);
+    bool const wantTray = m_settings.integrationMode != IntegrationMode::TaskbarOnly || widgetUnavailable
+        || (widgetVisible && m_trayWanted && now - m_widgetVisibleSince < WidgetRecoveryGraceMs);
     if (wantTray == m_trayWanted)
     {
         if (refreshIntegration) RefreshIntegration();

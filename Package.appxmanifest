@@ -5,7 +5,7 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
-  <Identity Name="SelfProject.VolumeMixer" Publisher="CN=VolumeMixer Development" Version="1.0.0.0" />
+  <Identity Name="SelfProject.VolumeMixer" Publisher="CN=VolumeMixer Development" Version="1.0.1.0" />
   <mp:PhoneIdentity PhoneProductId="a5d8702d-37c6-49c3-a54b-66bdd28e9d20" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
   <Properties>
     <DisplayName>Volume Mixer</DisplayName>
